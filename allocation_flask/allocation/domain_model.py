@@ -1,14 +1,11 @@
 from datetime import date
 from typing import List, Optional, Set
 from dataclasses import dataclass
-
-
 @dataclass(unsafe_hash=True)
 class OrderLine:
     orderid: str
     sku: str
     quantity: int
-
 class Batch:
     def __init__(
         self, reference: str, quantity: int, sku: str, eta: Optional[date] = None
@@ -47,14 +44,12 @@ class Batch:
     @property
     def allocated_quantity(self):
         return sum([o.quantity for o in self._allocated])
-
 class Product:
     def __init__(self, sku: str, batches: List[Batch]):
         self.sku = sku
         self.batches = batches
 
     def allocate(self, order_line: OrderLine) -> Batch:
-        raise NotImplementedError()
         try:
             batch = next(b for b in sorted(self.batches) if b.can_allocate(order_line))
             batch.allocate(order_line)
