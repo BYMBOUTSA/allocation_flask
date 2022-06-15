@@ -1,4 +1,0 @@
-Flask
-black
-flake8
-pytest
