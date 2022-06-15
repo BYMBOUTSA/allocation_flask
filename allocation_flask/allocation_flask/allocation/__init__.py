@@ -1,1 +1,0 @@
-from allocation.app import app
