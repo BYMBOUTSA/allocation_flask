@@ -1,13 +1,22 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify,  render_template, request
 from allocation.domain_model import InvalidSkuException
 
 from allocation.repository import Repository
 from . import services
+
 app = Flask(__name__)
 repository = Repository(products=[])
 @app.route("/", methods=["GET"])
 def hello_world():
-    return "<h1>Hello, World!</h1>"
+    name = request.args.get('name', 'World')
+    return render_template('hello_world.html', name=name)
+
+@app.route('/admin/products', methods=['GET'])
+def admin_products():
+    return render_template(
+        'products_list.html', products=services.list_products(repository=repository)
+    )
+
 @app.route("/products", methods=["GET"])
 def list_products():
     products = services.list_products(repository)
